@@ -3,7 +3,7 @@
   <the-nav-bar />
   <section class="catalog">
     <div class="container catalog__container">
-      <the-order-basket />
+      <the-order-basket :order-basket="orderBasket" />
       <catolog-item @open-modal="modalOpenOrClose" @add-product="addProduct" :catolog-product="catologBurgers" />
     </div>
   </section>
@@ -150,15 +150,24 @@ export default {
     }
 
     const addProduct = (order, name) => {
-      console.log(order)
-      console.log(name)
+      orderBasket.push(catologBurgers.find(item => item.name === name)),
+        orderBasket.forEach(obj => {
+          if (orderBasket.name === name) {
+            console.log('start')
+            obj.quantity = order
+          }
+        })
+      console.log(orderBasket)
     }
+
+    const orderBasket = reactive([])
     return {
       modalOpenOrClose,
       addProduct,
       modalProduct,
       catologBurgers,
-      cardProduct
+      cardProduct,
+      orderBasket
     }
   },
   components: { TheHeader, TheNavBar, TheFooter, TheOrderBasket, CatologItem, ModalProduct, ModalDelivery }
