@@ -1,13 +1,13 @@
 <template>
-  <div class="catalog__order order" v-if="orderBasket.length">
+  <div class="catalog__order order " v-if="orderBasket.length">
     <section class="order__wrapper">
-      <div class="order__wrap-title" role="button" tabindex="0">
+      <div class="order__wrap-title " role="button" tabindex="0">
         <h2 class="order__title">Корзина</h2>
         <span class="order__count">{{ orderBasket.length }}</span>
       </div>
       <div class="order__wrap-list">
         <ul class="order__list">
-          <li class="order__item" v-for="order in orderBasket" :key="order.name">
+          <li class="order__item" v-for="order in  orderBasket " :key="order.name">
             <img class="order__image" :src="order.image" :alt="order.name">
             <div class="order__product">
               <h3 class="order__product-title">{{ order.name }}</h3>
@@ -19,9 +19,9 @@
               </p>
             </div>
             <div class="order__product-count count">
-              <button class="count__minus">-</button>
-              <p class="count__amount">1</p>
-              <button class="count__plus">+</button>
+              <button class="count__minus" @click="$emit('countMinus', order)">-</button>
+              <p class="count__amount">{{ order.quantity }}</p>
+              <button class="count__plus" @click="$emit('countPlus', order)">+</button>
             </div>
           </li>
         </ul>
@@ -32,7 +32,7 @@
             <span class="currency">₽</span>
           </p>
         </div>
-        <button class="order__submit">Оформить заказ</button>
+        <button class="order__submit" @click="$emit('openDelivery')">Оформить заказ</button>
         <div class="order__wrap-apeal">
           <p class="order__apeal">Бесплатная доставка</p>
           <button class="order__close">Свернуть</button>
@@ -43,7 +43,6 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue'
 
 // переключатель видимости корзины
 // document.querySelector('.order__wrap-title').addEventListener('click', () => {
@@ -56,21 +55,14 @@ export default {
     orderBasket: {
       type: Array,
       default: () => []
+    },
+    totalOrder: {
+      type: Number,
+      required: true
     }
   },
-  setup(props) {
-    const orderCount = ref(0)
-
-    const totalOrder = computed(() => {
-
-      return props.orderBasket.reduce((acamulator, item) => {
-        return acamulator + item.price
-      }, orderCount.value)
-    })
-
+  setup() {
     return {
-      orderCount,
-      totalOrder
     }
   }
 }
