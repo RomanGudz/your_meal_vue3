@@ -1,6 +1,6 @@
 <template>
   <the-header />
-  <the-nav-bar :navigate="navigate" :active-nav="activeNav" @active-button="activeButton" />
+  <the-nav-bar />
   <section class="catalog">
     <div class="container catalog__container">
       <the-order-basket :order-basket="orderBasket" :total-order="totalOrder" @count-minus='countMinus'
@@ -26,10 +26,12 @@ import CatologItem from './components/UI/CatologItem.vue';
 import ModalProduct from './components/UI/ModalProduct.vue';
 import ModalDelivery from './components/UI/ModalDelivery.vue';
 import { computed, reactive, ref } from 'vue';
+import { useStore } from 'vuex'
 
 export default {
 
   setup() {
+    const store = useStore()
 
     const modalProduct = ref('none')
     const modalDelivery = ref('none')
@@ -43,23 +45,7 @@ export default {
         return acamulator + (item.quantity * item.price)
       }, total.value)
     })
-    const navigate = ref({
-      burger: 'Бургеры',
-      snack: 'Закуски',
-      hotdog: 'Хот-доги',
-      combo: 'Комбо',
-      shawarma: 'Шаурма',
-      pizza: 'Пицца',
-      wok: 'Вок',
-      dessert: 'Десерты',
-      sauce: 'Соусы'
-    })
 
-    const activeNav = ref('burger')
-
-    const activeButton = (id) => {
-      activeNav.value = id
-    }
 
     const catologBurgers = reactive([
       {
@@ -528,7 +514,7 @@ export default {
         dessert: catologDessert,
         sauce: catologSauce,
       };
-      return catalogs[activeNav.value]
+      return catalogs[store.state.activeNav]
     })
 
     const countMinus = (order) => {
@@ -562,7 +548,6 @@ export default {
     }
 
     return {
-      activeButton,
       modalOpenOrClose,
       addProduct,
       countMinus,
@@ -571,8 +556,6 @@ export default {
       modalDeliveryClose,
       submitDelivery,
       catologProduct,
-      navigate,
-      activeNav,
       modalProduct,
       modalDelivery,
       cardProduct,

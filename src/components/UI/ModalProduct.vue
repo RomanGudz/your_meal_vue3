@@ -1,5 +1,5 @@
 <template>
-  <div class="modal modal_product ">
+  <div class="modal modal_product">
     <div class="modal__main modal-product">
       <div class="modal-product-container">
         <h2 class="modal-product-title">{{ cardProduct.name }}</h2>
@@ -45,6 +45,7 @@
 
 <script>
 import { ref } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
   props: {
@@ -54,7 +55,8 @@ export default {
     }
   },
   setup() {
-
+    const store = useStore()
+    const modalProduct = ref(store.state.ModalProduct)
     const countProduct = ref(1)
 
     const countMinus = () => {
@@ -69,6 +71,7 @@ export default {
     return {
       countMinus,
       countPlus,
+      modalProduct,
       countProduct
     }
   }

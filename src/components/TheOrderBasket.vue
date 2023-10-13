@@ -7,7 +7,7 @@
       </div>
       <div class="order__wrap-list">
         <ul class="order__list">
-          <li class="order__item" v-for="order in  orderBasket " :key="order.name">
+          <li class="order__item" v-for=" order  in   orderBasket  " :key="order.name">
             <img class="order__image" :src="order.image" :alt="order.name">
             <div class="order__product">
               <h3 class="order__product-title">{{ order.name }}</h3>
@@ -35,7 +35,7 @@
         <button class="order__submit" @click="$emit('openDelivery')">Оформить заказ</button>
         <div class="order__wrap-apeal">
           <p class="order__apeal">Бесплатная доставка</p>
-          <button class="order__close">Свернуть</button>
+          <button class="order__close" @click="toggleOrder">Свернуть</button>
         </div>
       </div>
     </section>
@@ -43,12 +43,7 @@
 </template>
 
 <script>
-
-// переключатель видимости корзины
-// document.querySelector('.order__wrap-title').addEventListener('click', () => {
-//   document.querySelector('.order').classList.toggle('order__open')
-// })
-
+import { ref } from 'vue'
 
 export default {
   props: {
@@ -62,10 +57,14 @@ export default {
     }
   },
   setup() {
+    const openOrder = ref(false)
+    const toggleOrder = () => {
+      openOrder.value = !openOrder.value
+    }
     return {
+      toggleOrder,
+      openOrder
     }
   }
 }
 </script>
-
-<style lang="scss" scoped></style>

@@ -45,10 +45,11 @@
 
 <script>
 import { ref } from 'vue'
+import { useStore } from 'vuex'
 export default {
   emits: ['submitDelivery'],
   setup(_, { emit }) {
-
+    const store = useStore()
     const formDelivery = ref({
       name: '',
       phone: '',
@@ -69,9 +70,12 @@ export default {
           itercom: '',
         }
     }
-
+    const modalDeliveryClose = () => {
+      store.commit("modalDeliveryClose")
+    }
     return {
       formDelivery,
+      modalDeliveryClose,
       submit
     }
   }
