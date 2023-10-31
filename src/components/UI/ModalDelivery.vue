@@ -50,6 +50,7 @@ export default {
   emits: ['submitDelivery'],
   setup(_, { emit }) {
     const store = useStore()
+
     const formDelivery = ref({
       name: '',
       phone: '',
