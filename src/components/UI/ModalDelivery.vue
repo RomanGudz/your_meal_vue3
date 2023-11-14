@@ -1,5 +1,5 @@
 <template>
-  <div class="modal modal_delivery">
+  <div class="modal modal_delivery" v-if="modalOpenOrCloseModalDelivery">
     <div class="modal__main modal-delivery">
       <div class="modal-delivery__container">
         <h2 class="modal_delivery__title">Доставка</h2>
@@ -32,7 +32,7 @@
         </form>
         <button class="modal-delivery__btn" type="submit" form="delivery" @click.prevent="submit">Оформить</button>
       </div>
-      <button class="modal__close" @click="$emit('modalDeliveryClose')">
+      <button class="modal__close" @click="ModalDeliveryOpenOrClose">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <rect x="5.07422" y="5.28247" width="1" height="20" transform="rotate(-45 5.07422 5.28247)" />
           <rect x="5.78125" y="19.4246" width="1" height="20" transform="rotate(-135 5.78125 19.4246)" />
@@ -44,40 +44,30 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { useStore } from 'vuex'
 export default {
-  emits: ['submitDelivery'],
-  setup(_, { emit }) {
+  setup() {
     const store = useStore()
-
-    const formDelivery = ref({
-      name: '',
-      phone: '',
-      delivery: '',
-      address: '',
-      floor: '',
-      itercom: '',
-
+    const modalOpenOrCloseModalDelivery = computed(() => {
+      return store.getters.modalOpenOrCloseModalDelivery
     })
+
+    const formDelivery = computed(() => {
+      return store.getters.formDelivery
+    })
+
     const submit = () => {
-      emit('submitDelivery', formDelivery.value),
-        formDelivery.value = {
-          name: '',
-          phone: '',
-          delivery: '',
-          address: '',
-          floor: '',
-          itercom: '',
-        }
+      store.commit('submitOrder')
     }
-    const modalDeliveryClose = () => {
-      store.commit("modalDeliveryClose")
+    const ModalDeliveryOpenOrClose = () => {
+      store.commit('ModalDeliveryOpenOrClose')
     }
     return {
       formDelivery,
-      modalDeliveryClose,
-      submit
+      ModalDeliveryOpenOrClose,
+      submit,
+      modalOpenOrCloseModalDelivery
     }
   }
 }

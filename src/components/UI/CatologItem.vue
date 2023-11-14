@@ -5,14 +5,13 @@
       <ul class="catalog__list">
         <li class="catalog__item" v-for="product in  catologProduct" :key="product.id">
           <article class="product">
-            <img :src="product.image" :alt="product.name" class="product__image"
-              @click="$emit('openModal', product.name)">
+            <img :src="product.image" :alt="product.name" class="product__image" @click="openOrClose(product.name)">
             <p class="product__price">{{ product.price }} <span class="currency">₽</span></p>
             <h3 class="product__title">
-              <button class="product__detail" @click="$emit('openModal', product.name)">{{ product.name }}</button>
+              <button class="product__detail" @click="openOrClose(product.name)">{{ product.name }}</button>
             </h3>
             <p class="product__weight">{{ product.weight }}г</p>
-            <button class="product__add" type="button" @click="addProduct(1, product.name)">Добавить</button>
+            <button class="product__add" type="button" @click="addProduct(product.name)">Добавить</button>
           </article>
         </li>
       </ul>
@@ -21,7 +20,7 @@
 </template>
 
 <script>
-import { computed, toRaw } from 'vue'
+import { computed } from 'vue'
 import { useStore } from 'vuex'
 
 
@@ -30,33 +29,25 @@ export default {
     const store = useStore()
 
     const catologProduct = computed(() => {
-
-      return toRaw(store.getters.catologProduct)
+      return store.getters.catologProduct
     })
 
     const activeTitle = computed(() => {
       return store.getters.activeTitle
     })
 
-    const addProduct = (order, name) => {
-      const foundProduct = catologProduct.value.find(item => item.name === name);
+    const addProduct = (name) => {
+      store.commit('addOrderBasket', name)
+    }
 
-      if (foundProduct) {
-        const existingItem = store.state.orderBasket.find(item => item.name === name);
-
-        if (existingItem) {
-          existingItem.quantity += order;
-        }
-        else {
-          foundProduct.quantity = order;
-          store.state.orderBasket.push(foundProduct);
-        }
-      }
+    const openOrClose = (name) => {
+      store.commit('modalOpenOrClose', name)
     }
     return {
       catologProduct,
       addProduct,
-      activeTitle
+      activeTitle,
+      openOrClose
     }
   }
 }
