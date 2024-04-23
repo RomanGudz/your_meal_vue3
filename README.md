@@ -1,5 +1,8 @@
 # your_meal_vue3
 
+# Deploed 
+https://your-meal-vue3.vercel.app/
+
 ## Project setup
 ```
 npm install
